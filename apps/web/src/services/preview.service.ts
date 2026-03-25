@@ -1,12 +1,14 @@
-import type { CustomizationConfig, Template } from '@craft/types';
+import type { CustomizationConfig, Template, TemplateCategory, StellarMockData, DeepPartial } from '@craft/types';
 import { normalizeDraftConfig } from './customization-draft.service';
 import { validateCustomizationConfig } from '@/lib/customization/validate';
+import { mockStellarGenerator } from '@/lib/preview/mock-stellar-generator';
 
 export interface PreviewConfig {
     templateId: string;
     templateName: string;
     previewImageUrl: string;
     customization: CustomizationConfig;
+    mockData: StellarMockData;
     enabledFeatures: string[];
     disabledFeatures: string[];
     isValid: boolean;
@@ -84,6 +86,15 @@ export class PreviewService {
     }
 
     /**
+     * Generate mock Stellar data for preview.
+     * Uses the MockStellarGenerator to create deterministic fake data.
+     */
+    generateMockData(customization: CustomizationConfig): StellarMockData {
+        const network = customization.stellar?.network ?? 'mainnet';
+        return mockStellarGenerator.generateMockData(network, this.templateCategory);
+    }
+
+    /**
      * Generate a full preview config for a template, optionally overlaying a
      * saved customization. No network access is required — all data is passed in.
      */
@@ -120,6 +131,7 @@ export class PreviewService {
             templateName: template.name,
             previewImageUrl: template.previewImageUrl,
             customization: merged,
+            mockData: this.generateMockData(merged),
             enabledFeatures,
             disabledFeatures,
             isValid: validation.valid,
