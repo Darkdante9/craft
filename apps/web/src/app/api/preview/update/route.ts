@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { withAuth } from '@/lib/api/with-auth';
 import { validateCustomizationConfig } from '@/lib/customization/validate';
 import { previewService } from '@/services/preview.service';
-import type { CustomizationConfig } from '@craft/types';
+import type { CustomizationConfig, DeepPartial } from '@craft/types';
 
 /**
  * POST /api/preview/update
  * Updates preview with partial customization changes.
- * Expects { current, changes } where changes is Partial<CustomizationConfig>.
+ * Expects { current, changes } where changes is DeepPartial<CustomizationConfig>.
  * Returns minimal update payload with changedFields and optional mockData.
  */
 export const POST = withAuth(async (req: NextRequest) => {
@@ -35,7 +35,7 @@ export const POST = withAuth(async (req: NextRequest) => {
     }
 
     const current = body.current as CustomizationConfig;
-    const changes = body.changes as Partial<CustomizationConfig>;
+    const changes = body.changes as DeepPartial<CustomizationConfig>;
 
     try {
         const payload = previewService.updatePreview(current, changes);

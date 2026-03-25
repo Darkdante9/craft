@@ -74,6 +74,15 @@ export function diffConfigs(
 }
 
 export class PreviewService {
+    private templateCategory?: TemplateCategory;
+
+    /**
+     * Set template category for context-specific mock data generation.
+     */
+    setTemplateCategory(category?: TemplateCategory): void {
+        this.templateCategory = category;
+    }
+
     /**
      * Generate a full preview config for a template, optionally overlaying a
      * saved customization. No network access is required — all data is passed in.
@@ -117,6 +126,7 @@ export class PreviewService {
             validationErrors: validation.errors,
         };
     }
+
     /**
      * Update preview with partial customization changes.
      * Detects changed fields and only regenerates mock data if network config changed.
@@ -124,15 +134,10 @@ export class PreviewService {
      */
     updatePreview(
         currentCustomization: CustomizationConfig,
-        changes: Partial<CustomizationConfig>
+        changes: DeepPartial<CustomizationConfig>
     ): { customization: CustomizationConfig; mockData?: StellarMockData; changedFields: string[]; timestamp: string } {
-        // Merge changes into current config
         const updatedCustomization = this.mergeCustomization(currentCustomization, changes);
-
-        // Detect which fields changed
         const changedFields = this.detectChangedFields(currentCustomization, changes);
-
-        // Determine if mock data needs refresh (network config changed)
         const requiresMockDataRefresh = this.requiresMockDataRefresh(changedFields);
 
         const payload: any = {
@@ -141,7 +146,6 @@ export class PreviewService {
             timestamp: new Date().toISOString(),
         };
 
-        // Only regenerate mock data if network config changed
         if (requiresMockDataRefresh) {
             payload.mockData = this.generateMockData(updatedCustomization);
         }
@@ -154,7 +158,7 @@ export class PreviewService {
      */
     private mergeCustomization(
         current: CustomizationConfig,
-        changes: Partial<CustomizationConfig>
+        changes: DeepPartial<CustomizationConfig>
     ): CustomizationConfig {
         return {
             branding: { ...current.branding, ...(changes.branding ?? {}) },
@@ -169,11 +173,10 @@ export class PreviewService {
      */
     private detectChangedFields(
         current: CustomizationConfig,
-        changes: Partial<CustomizationConfig>
+        changes: DeepPartial<CustomizationConfig>
     ): string[] {
         const fields: string[] = [];
 
-        // Check branding changes
         if (changes.branding) {
             Object.keys(changes.branding).forEach((key) => {
                 const currentVal = (current.branding as any)[key];
@@ -184,7 +187,6 @@ export class PreviewService {
             });
         }
 
-        // Check feature changes
         if (changes.features) {
             Object.keys(changes.features).forEach((key) => {
                 const currentVal = (current.features as any)[key];
@@ -195,7 +197,6 @@ export class PreviewService {
             });
         }
 
-        // Check stellar changes
         if (changes.stellar) {
             Object.keys(changes.stellar).forEach((key) => {
                 const currentVal = (current.stellar as any)[key];

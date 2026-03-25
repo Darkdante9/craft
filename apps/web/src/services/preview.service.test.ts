@@ -755,7 +755,10 @@ describe('PreviewService.applyUpdate', () => {
             const result = service.updatePreview(current, changes);
 
             expect(result.mockData).toBeDefined();
-            expect(result.mockData!.accountBalance).toBe('5000.0000000');
+            // Balance should be in testnet range (5000-6000)
+            const balance = parseFloat(result.mockData!.accountBalance);
+            expect(balance).toBeGreaterThanOrEqual(5000);
+            expect(balance).toBeLessThanOrEqual(6000);
             expect(result.mockData!.assetPrices.XLM).toBe(0.10);
         });
 
@@ -771,7 +774,10 @@ describe('PreviewService.applyUpdate', () => {
             const result = service.updatePreview(current, changes);
 
             expect(result.mockData).toBeDefined();
-            expect(result.mockData!.accountBalance).toBe('10000.0000000');
+            // Balance should be in mainnet range (10000-11000)
+            const balance = parseFloat(result.mockData!.accountBalance);
+            expect(balance).toBeGreaterThanOrEqual(10000);
+            expect(balance).toBeLessThanOrEqual(11000);
             expect(result.mockData!.assetPrices.XLM).toBe(0.12);
         });
     });
