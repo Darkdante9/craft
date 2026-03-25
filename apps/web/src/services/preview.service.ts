@@ -172,6 +172,15 @@ export class PreviewService {
     }
 
     /**
+     * Generate mock Stellar data for preview.
+     * Uses the MockStellarGenerator to create deterministic fake data.
+     */
+    generateMockData(customization: CustomizationConfig): StellarMockData {
+        const network = customization.stellar?.network ?? 'mainnet';
+        return mockStellarGenerator.generateMockData(network, this.templateCategory);
+    }
+
+    /**
      * Generate a full preview config for a template, optionally overlaying a
      * saved customization. No network access is required — all data is passed in.
      */
