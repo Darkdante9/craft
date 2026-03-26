@@ -124,3 +124,34 @@ export interface GenerationRequest {
     customization: CustomizationConfig;
     outputPath: string;
 }
+
+// ── Deployment Logs API ───────────────────────────────────────────────────────
+
+export type LogLevel = 'info' | 'warn' | 'error';
+
+export interface LogsQueryParams {
+    page: number;
+    limit: number;
+    order: 'asc' | 'desc';
+    since?: string;
+    level?: LogLevel;
+}
+
+export interface DeploymentLogResponse {
+    id: string;
+    deploymentId: string;
+    /** ISO 8601 string mapped from created_at */
+    timestamp: string;
+    level: LogLevel;
+    message: string;
+}
+
+export interface PaginatedLogsResponse {
+    data: DeploymentLogResponse[];
+    pagination: {
+        page: number;
+        limit: number;
+        total: number;
+        hasNextPage: boolean;
+    };
+}
