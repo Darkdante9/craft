@@ -3,15 +3,9 @@
     "compilerOptions": {
         "types": ["vitest/globals"],
         "paths": {
-            "@/*": [
-                "./src/*"
-            ],
-            "@craft/types": [
-                "../../packages/types/src"
-            ],
-            "@craft/stellar": [
-                "../../packages/stellar/src"
-            ]
+            "@/*": ["./src/*"],
+            "@craft/types": ["../../packages/types/src"],
+            "@craft/stellar": ["../../packages/stellar/src"]
         }
     },
     "include": [

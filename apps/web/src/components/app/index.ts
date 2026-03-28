@@ -9,3 +9,4 @@ export { UserMenu } from './UserMenu';
 export { EmptyState } from './EmptyState';
 export { LoadingSkeleton } from './LoadingSkeleton';
 export { ErrorState } from './ErrorState';
+export { RetryButton } from './RetryButton';
