@@ -10,4 +10,3 @@ export { EmptyState } from './EmptyState';
 export { LoadingSkeleton } from './LoadingSkeleton';
 export { ErrorState } from './ErrorState';
 export { RetryButton } from './RetryButton';
-export { ErrorReportForm } from './ErrorReportForm';
