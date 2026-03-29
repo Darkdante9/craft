@@ -20,7 +20,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { withDeploymentAuth } from '@/lib/api/with-auth';
+import { withDomainTierCheck } from '@/lib/api/with-auth';
 import { generateDnsConfiguration } from '@/lib/dns/dns-configuration';
 import { requireDomainTier } from '@/lib/api/require-domain-tier';
 
@@ -28,6 +28,7 @@ export const GET = withDeploymentAuth(async (_req: NextRequest, { params, supaba
     const denied = await requireDomainTier(supabase, user.id);
     if (denied) return denied;
 
+export const GET = withDomainTierCheck(async (_req: NextRequest, { params, supabase }) => {
     const { data: deployment, error } = await supabase
         .from('deployments')
         .select('custom_domain')
