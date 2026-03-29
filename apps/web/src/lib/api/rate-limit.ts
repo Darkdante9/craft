@@ -41,7 +41,7 @@ export interface RateLimitResult {
   retryAfterMs: number;
 }
 
-// ── Pre-defined configs for auth-sensitive routes ────────────────────────────
+// ── Pre-defined configs per endpoint type ────────────────────────────────────
 
 /** Strict limit for credential submission (sign-in / sign-up). */
 export const AUTH_RATE_LIMIT: RateLimitConfig = {
@@ -53,6 +53,30 @@ export const AUTH_RATE_LIMIT: RateLimitConfig = {
 export const AUTH_READ_RATE_LIMIT: RateLimitConfig = {
   limit: 60,
   windowMs: 60 * 1000, // 60 requests per minute
+};
+
+/** General API endpoints (templates, deployments, analytics). */
+export const API_RATE_LIMIT: RateLimitConfig = {
+  limit: 120,
+  windowMs: 60 * 1000, // 120 requests per minute
+};
+
+/** Mutation endpoints (create/update/delete deployments, drafts). */
+export const MUTATION_RATE_LIMIT: RateLimitConfig = {
+  limit: 30,
+  windowMs: 60 * 1000, // 30 mutations per minute
+};
+
+/** Webhook endpoints — high throughput, verified by signature. */
+export const WEBHOOK_RATE_LIMIT: RateLimitConfig = {
+  limit: 500,
+  windowMs: 60 * 1000, // 500 per minute
+};
+
+/** Cron endpoints — called by Vercel Cron, very low expected volume. */
+export const CRON_RATE_LIMIT: RateLimitConfig = {
+  limit: 10,
+  windowMs: 60 * 1000, // 10 per minute
 };
 
 // ── Store ────────────────────────────────────────────────────────────────────
